@@ -1,0 +1,422 @@
+{
+  "name": "Agente-A3",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -576,
+        128
+      ],
+      "id": "a979f553-3c04-4b4c-867e-37a109921d4d",
+      "name": "When chat message received",
+      "webhookId": "4e53f246-3469-4378-bc07-a65847dc853e"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        176,
+        208
+      ],
+      "id": "cac29497-2ff6-448b-bbb5-af74623cc251",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "description": "gerenciar planilha",
+        "jsCode": "const args = this.getArguments(); \nconst dadosFormatados = {\n    DATA: args.data || new Date().toLocaleDateString('pt-BR'),\n    CLIENTE: args.cliente,\n    PRODUTO: args.produto,\n    VALOR: parseFloat(args.valor) || 0\n};\nreturn dadosFormatados;"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.3,
+      "position": [
+        272,
+        208
+      ],
+      "id": "f2552294-5036-4967-abff-26286e8cf37e",
+      "name": "Code Tool"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "15_H4bSmMz6TdDp8PMCddXkSFwWGtA6wPM1VjJ6KQabE",
+          "mode": "list",
+          "cachedResultName": "A3_Automação",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/15_H4bSmMz6TdDp8PMCddXkSFwWGtA6wPM1VjJ6KQabE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1606453963,
+          "mode": "list",
+          "cachedResultName": "Página1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/15_H4bSmMz6TdDp8PMCddXkSFwWGtA6wPM1VjJ6KQabE/edit#gid=1606453963"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "DATA": "={{ $json.DATA }}",
+            "CLIENTE": "={{ $json.CLIENTE }}",
+            "PRODUTO": "={{ $json.PRODUTO }}",
+            "VALOR": "={{ $json.VALOR }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "DATA",
+              "displayName": "DATA",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "CLIENTE",
+              "displayName": "CLIENTE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "PRODUTO",
+              "displayName": "PRODUTO",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "VALOR",
+              "displayName": "VALOR",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        592,
+        48
+      ],
+      "id": "9bfa3538-c107-4b61-8d98-65ff7ccaf1e3",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleApi": {
+          "id": "ScZ2SU0UdkhULOKt",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        176,
+        480
+      ],
+      "id": "e83a0130-7c89-4529-8f01-dc74f3f92554",
+      "name": "Simple Memory1"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "15_H4bSmMz6TdDp8PMCddXkSFwWGtA6wPM1VjJ6KQabE",
+          "mode": "list",
+          "cachedResultName": "A3_Automação",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/15_H4bSmMz6TdDp8PMCddXkSFwWGtA6wPM1VjJ6KQabE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1606453963,
+          "mode": "list",
+          "cachedResultName": "Página1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/15_H4bSmMz6TdDp8PMCddXkSFwWGtA6wPM1VjJ6KQabE/edit#gid=1606453963"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        288,
+        480
+      ],
+      "id": "9b88b27b-2727-4a36-8471-31d10e2d7d3f",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleApi": {
+          "id": "ScZ2SU0UdkhULOKt",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "2843b06e-6744-4466-b11e-d25e7a2e06b5",
+              "leftValue": "={{ $json.chatInput }}",
+              "rightValue": "/quanto|quais|quem|me d[êe]|hist[óo]rico|buscar|consultar|^lista$|^me d[êe] a lista/i",
+              "operator": {
+                "type": "string",
+                "operation": "regex"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -384,
+        128
+      ],
+      "id": "e319328e-6938-483b-b1e2-3491346e47d8",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "options": {
+          "temperature": 0
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+      "typeVersion": 1,
+      "position": [
+        80,
+        208
+      ],
+      "id": "49554d76-3606-4bef-8d8b-7e238738a079",
+      "name": "DeepSeek Chat Model",
+      "credentials": {
+        "deepSeekApi": {
+          "id": "5mqDiUPYoGf4qUz2",
+          "name": "DeepSeek account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+      "typeVersion": 1,
+      "position": [
+        64,
+        480
+      ],
+      "id": "a0781033-3d32-43d3-99ca-3b783cec502e",
+      "name": "DeepSeek Chat Model1",
+      "credentials": {
+        "deepSeekApi": {
+          "id": "5mqDiUPYoGf4qUz2",
+          "name": "DeepSeek account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const rawOutput = $input.item.json.output;\n\ntry {\n  // 1. Procura especificamente o padrão de um Array JSON [ ... ] dentro do texto\n  const jsonMatch = rawOutput.match(/\\[\\s*\\{[\\s\\S]*\\}\\s*\\]/);\n\n  if (!jsonMatch) {\n    throw new Error(\"A IA não retornou um formato de lista válido [ ... ].\");\n  }\n\n  // 2. Extrai apenas a parte encontrada do JSON\n  const cleanJson = jsonMatch[0].trim();\n  \n  // 3. Transforma em objeto nativo do n8n\n  const listaDeCompras = JSON.parse(cleanJson);\n\n  return listaDeCompras.map(compra => ({ json: compra }));\n  \n} catch (error) {\n  throw new Error(\"Erro ao isolar ou parsear o JSON: \" + error.message);\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        400,
+        48
+      ],
+      "id": "6662f87e-5bb3-4185-ab05-2796eb749fb5",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Sua tarefa é receber mensagens de compra do usuário (que podem conter uma ou MÚLTIPLAS compras separadas por linhas, vírgulas, barras ou qualquer outro delimitador), extrair os dados de cada uma e retornar estritamente um array de objetos JSON.\n\nMesmo que o usuário envie apenas uma compra, o retorno DEVE ser um array (lista) de objetos.\n\nFormato de saída estrito esperado:\n[\n  {\n    \"DATA\": \"DD/MM/AAAA\",\n    \"CLIENTE\": \"Nome do Cliente\",\n    \"PRODUTO\": \"Nome do Produto\",\n    \"VALOR\": 150.00\n  },\n  {\n    \"DATA\": \"DD/MM/AAAA\",\n    \"CLIENTE\": \"Outro Cliente\",\n    \"PRODUTO\": \"Outro Produto\",\n    \"VALOR\": 45.50\n  }\n]\n\nRegras:\n1. Não responda com mensagens de texto amigáveis ou saudações. Apenas retorne o Array JSON estruturado.\n2. No campo VALOR, insira apenas números (use ponto para decimais se necessário, ex: 25.50).\n3. Se não houver data explícita na mensagem de uma compra, use a data atual.\n4. IGNORE QUALQUER MENSAGEM REQUISITANDO/PEDINDO INFORMAÇÕES DA PLANILHA."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        96,
+        48
+      ],
+      "id": "b978507b-affb-4303-b437-24c53f28d4d2",
+      "name": "Inserção"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Você é um analista de dados e assistente inteligente especializado em consultas da planilha \"A3_Automação\". Sua única e exclusiva função é ler as informações da planilha e responder às perguntas do usuário de forma clara, prestativa e padronizada.\n\nInstruções de Operação:\n1. Sempre que o usuário fizer uma pergunta sobre gastos, histórico, clientes ou produtos, use IMEDIATAMENTE a ferramenta \"Google Sheets Tool\" (operação Get Rows) para trazer todas as linhas da \"Página1\".\n2. Analise e filtre os dados retornados pela ferramenta em segundo plano para encontrar exatamente o que o usuário pediu.\n3. Se o usuário perguntar sobre valores ou gastos de alguém, faça a soma matemática dos valores encontrados para entregar o gasto total.\n\nVocê deve responder OBRIGATORIAMENTE no chat utilizando o seguinte formato padronizado em Markdown (mantenha os títulos, as linhas de separação e os negritos):\n\n### 📊 Relatório de Consulta - Planilha A3\n---\n**Resultados encontrados para a sua busca:**\n\n- **Solicitação:** [Descreva brevemente e de forma limpa o que o usuário te perguntou]\n- **Status:** [Insira: \"Registros localizados com sucesso!\" ou \"Nenhum registro encontrado para esta busca.\"]\n\n**Resumo dos Dados:**\n[Se encontrar dados: Liste as compras encontradas de forma organizada ou monte uma pequena tabela com as colunas. Se houver cálculos de soma, mostre o total destacado, ex: \"Total Gasto: R$ X,XX\"]\n[Se não encontrar dados: Diga amigavelmente que revisou a planilha e não encontrou nenhuma menção ao termo pesquisado]\n\n---\n*Caso precise de outro filtro ou mais detalhes sobre a planilha, é só pedir!*"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        80,
+        352
+      ],
+      "id": "818a4f3b-9787-4c5a-8bda-2bf7500fb353",
+      "name": "Consulta"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Inserção",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "Inserção",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory1": {
+      "ai_memory": [
+        [
+          {
+            "node": "Consulta",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "Consulta",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Consulta",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Inserção",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DeepSeek Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Inserção",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DeepSeek Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Consulta",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Inserção": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "0181f3e6-b2a7-45cd-8bef-1e47d6377e70",
+  "meta": {
+    "instanceId": "6289c9e6cfb23ff1678c472b9a934510b74199abd98f74bb9badcadfd563b672"
+  },
+  "nodeGroups": [],
+  "id": "OhQvcyzcd8M2tsIw",
+  "tags": []
+}
