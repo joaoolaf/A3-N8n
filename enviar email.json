@@ -1,0 +1,197 @@
+{
+  "name": "Monitor Telegram",
+  "nodes": [
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "cond-1",
+              "leftValue": "={{ $json.chatInput }}",
+              "rightValue": "urgente",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "6969ee16-b32d-440f-9db5-58319123cd74",
+      "name": "É urgente?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -448,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{ \"mensagem\": \"Registrado e enviado ao Telegram: urgente\" }",
+        "options": {}
+      },
+      "id": "5d9383d7-c019-4b8c-a601-14850c499f8a",
+      "name": "Responde urgente",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        464,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{ \"mensagem\": \"Registrado e enviado ao Telegram: normal\" }",
+        "options": {}
+      },
+      "id": "a33d7c56-9da6-477c-803f-48985d63a0b8",
+      "name": "Responde normal",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        480,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "joaofrancafaculdade@gmail.com",
+        "subject": "⚠️ ALERTA: Notificação Urgente",
+        "emailType": "text",
+        "message": "==⚠️ URGENTE recebido em {{ $now.toFormat('yyyy-MM-dd HH:mm:ss') }}  ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        208,
+        32
+      ],
+      "id": "f0778a88-95c4-4411-b253-41aa3c90f3cb",
+      "name": "Send a message",
+      "webhookId": "a5f8cfdb-a60e-476b-b6aa-023cdff4efff",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "MDYJvdnMotXm7Ane",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "joaofrancafaculdade@gmail.com",
+        "subject": "✅ Notificação Padrão",
+        "emailType": "text",
+        "message": "==✅ NORMAL recebido em {{ $now.toFormat('yyyy-MM-dd HH:mm:ss') }}  ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        192,
+        208
+      ],
+      "id": "da019377-871f-44fb-987c-ccd4f27b7b2f",
+      "name": "Send a message1",
+      "webhookId": "2cdf12a1-4ec2-4330-9d3c-232b9b482d81",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "MDYJvdnMotXm7Ane",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -736,
+        112
+      ],
+      "id": "c108933b-bb8a-45b2-b030-2bcd539b4aa6",
+      "name": "When chat message received",
+      "webhookId": "097ad886-a64d-4c7b-abca-a6306f4d91e5"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "É urgente?": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Responde urgente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message1": {
+      "main": [
+        [
+          {
+            "node": "Responde normal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "É urgente?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "58256855-45b7-4e24-94a6-b5e5ee62d77d",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6289c9e6cfb23ff1678c472b9a934510b74199abd98f74bb9badcadfd563b672"
+  },
+  "nodeGroups": [],
+  "id": "5g5iURSYkv60AZRM",
+  "tags": []
+}
