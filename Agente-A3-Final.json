@@ -3,13 +3,15 @@
   "nodes": [
     {
       "parameters": {
-        "options": {}
+        "options": {
+          "responseMode": "responseNodes"
+        }
       },
       "type": "@n8n/n8n-nodes-langchain.chatTrigger",
       "typeVersion": 1.4,
       "position": [
-        -576,
-        128
+        -656,
+        48
       ],
       "id": "a979f553-3c04-4b4c-867e-37a109921d4d",
       "name": "When chat message received",
@@ -20,8 +22,8 @@
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "typeVersion": 1.4,
       "position": [
-        176,
-        208
+        144,
+        192
       ],
       "id": "cac29497-2ff6-448b-bbb5-af74623cc251",
       "name": "Simple Memory"
@@ -34,8 +36,8 @@
       "type": "@n8n/n8n-nodes-langchain.toolCode",
       "typeVersion": 1.3,
       "position": [
-        272,
-        208
+        240,
+        192
       ],
       "id": "f2552294-5036-4967-abff-26286e8cf37e",
       "name": "Code Tool"
@@ -113,7 +115,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        592,
+        480,
         48
       ],
       "id": "9bfa3538-c107-4b61-8d98-65ff7ccaf1e3",
@@ -130,7 +132,7 @@
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "typeVersion": 1.4,
       "position": [
-        176,
+        144,
         480
       ],
       "id": "e83a0130-7c89-4529-8f01-dc74f3f92554",
@@ -158,7 +160,7 @@
       "type": "n8n-nodes-base.googleSheetsTool",
       "typeVersion": 4.7,
       "position": [
-        288,
+        240,
         480
       ],
       "id": "9b88b27b-2727-4a36-8471-31d10e2d7d3f",
@@ -182,7 +184,7 @@
           "conditions": [
             {
               "id": "2843b06e-6744-4466-b11e-d25e7a2e06b5",
-              "leftValue": "={{ $json.chatInput }}",
+              "leftValue": "={{ $('When chat message received').item.json.chatInput }}",
               "rightValue": "/quanto|quais|quem|me d[êe]|hist[óo]rico|buscar|consultar|^lista$|^me d[êe] a lista/i",
               "operator": {
                 "type": "string",
@@ -197,8 +199,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -384,
-        128
+        -128,
+        192
       ],
       "id": "e319328e-6938-483b-b1e2-3491346e47d8",
       "name": "If"
@@ -212,8 +214,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
       "typeVersion": 1,
       "position": [
-        80,
-        208
+        48,
+        192
       ],
       "id": "49554d76-3606-4bef-8d8b-7e238738a079",
       "name": "DeepSeek Chat Model",
@@ -231,7 +233,7 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
       "typeVersion": 1,
       "position": [
-        64,
+        48,
         480
       ],
       "id": "a0781033-3d32-43d3-99ca-3b783cec502e",
@@ -245,12 +247,12 @@
     },
     {
       "parameters": {
-        "jsCode": "const rawOutput = $input.item.json.output;\n\ntry {\n  // 1. Procura especificamente o padrão de um Array JSON [ ... ] dentro do texto\n  const jsonMatch = rawOutput.match(/\\[\\s*\\{[\\s\\S]*\\}\\s*\\]/);\n\n  if (!jsonMatch) {\n    throw new Error(\"A IA não retornou um formato de lista válido [ ... ].\");\n  }\n\n  // 2. Extrai apenas a parte encontrada do JSON\n  const cleanJson = jsonMatch[0].trim();\n  \n  // 3. Transforma em objeto nativo do n8n\n  const listaDeCompras = JSON.parse(cleanJson);\n\n  return listaDeCompras.map(compra => ({ json: compra }));\n  \n} catch (error) {\n  throw new Error(\"Erro ao isolar ou parsear o JSON: \" + error.message);\n}"
+        "jsCode": "const rawOutput = $input.item.json.output;\ntry {\n  const jsonMatch = rawOutput.match(/\\[\\s*\\{[\\s\\S]*\\}\\s*\\]/);\n  if (!jsonMatch) {\n    throw new Error(\"A IA não retornou um formato de lista válido [ ... ].\");\n  }\n  const cleanJson = jsonMatch[0].trim();\n  const listaDeCompras = JSON.parse(cleanJson);\n  return listaDeCompras.map(compra => ({ json: compra }));\n} catch (error) {\n  throw new Error(\"Erro ao isolar ou parsear o JSON: \" + error.message);\n}"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        400,
+        352,
         48
       ],
       "id": "6662f87e-5bb3-4185-ab05-2796eb749fb5",
@@ -258,6 +260,8 @@
     },
     {
       "parameters": {
+        "promptType": "define",
+        "text": "={{ $('When chat message received').item.json.chatInput }}",
         "options": {
           "systemMessage": "Sua tarefa é receber mensagens de compra do usuário (que podem conter uma ou MÚLTIPLAS compras separadas por linhas, vírgulas, barras ou qualquer outro delimitador), extrair os dados de cada uma e retornar estritamente um array de objetos JSON.\n\nMesmo que o usuário envie apenas uma compra, o retorno DEVE ser um array (lista) de objetos.\n\nFormato de saída estrito esperado:\n[\n  {\n    \"DATA\": \"DD/MM/AAAA\",\n    \"CLIENTE\": \"Nome do Cliente\",\n    \"PRODUTO\": \"Nome do Produto\",\n    \"VALOR\": 150.00\n  },\n  {\n    \"DATA\": \"DD/MM/AAAA\",\n    \"CLIENTE\": \"Outro Cliente\",\n    \"PRODUTO\": \"Outro Produto\",\n    \"VALOR\": 45.50\n  }\n]\n\nRegras:\n1. Não responda com mensagens de texto amigáveis ou saudações. Apenas retorne o Array JSON estruturado.\n2. No campo VALOR, insira apenas números (use ponto para decimais se necessário, ex: 25.50).\n3. Se não houver data explícita na mensagem de uma compra, use a data atual.\n4. IGNORE QUALQUER MENSAGEM REQUISITANDO/PEDINDO INFORMAÇÕES DA PLANILHA."
         }
@@ -280,11 +284,117 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        80,
+        96,
         352
       ],
       "id": "818a4f3b-9787-4c5a-8bda-2bf7500fb353",
       "name": "Consulta"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Você é um agente analítico focado em classificação de tom de texto. Analise estritamente a última mensagem enviada pelo usuário no chatInput. Responda OBRIGATORIAMENTE com apenas uma dessas três palavras em caixa alta: POSITIVO, NEGATIVO ou NEUTRO. Não adicione saudações, não use ponto final e não escreva nenhuma outra palavra além da classificação."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -528,
+        48
+      ],
+      "id": "b9ca7690-0532-49c8-b3cb-4b43df17f0b6",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+      "typeVersion": 1,
+      "position": [
+        -528,
+        192
+      ],
+      "id": "b9e732eb-e6bb-48ac-bc4a-0b100bd35492",
+      "name": "DeepSeek Chat Model2",
+      "credentials": {
+        "deepSeekApi": {
+          "id": "5mqDiUPYoGf4qUz2",
+          "name": "DeepSeek account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "5b0ef7b6-e321-4b35-9399-51e6eff4757f",
+              "leftValue": "={{ $json.output }}",
+              "rightValue": "NEGATIVO",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -256,
+        48
+      ],
+      "id": "e82524eb-d7ae-4b5f-84ee-8ba40e46bac2",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "sendTo": "joaofrancafaculdade@gmail.com",
+        "subject": "🚨 ALERTA: Cliente Insatisfeito Detectado no Sistema!",
+        "message": "=Atenção Administrador,  O Agente de Triagem detectou uma mensagem com tom crítico/negativo no sistema.  Mensagem do Cliente: {{ $('When chat message received').item.json.chatInput }}  Ação recomendada: Entre em contato com o cliente para evitar o cancelamento",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        96,
+        -144
+      ],
+      "id": "880424d4-61e7-44e7-82d4-6872a5058ac9",
+      "name": "Send a message",
+      "webhookId": "c3d7a050-1516-4b6d-8e47-b78ccd3da1d3",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "MDYJvdnMotXm7Ane",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "message": "\"Sinto muito pelo transtorno! Identifiquei que você teve um problema. Para te ajudar o mais rápido possível, um e-mail de alerta foi enviado diretamente para o nosso Administrador, que já está revisando o seu caso manualmente. Logo entraremos em contato!\"",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.3,
+      "position": [
+        464,
+        -144
+      ],
+      "id": "c72b259c-1393-4bc1-a696-e5d34befd752",
+      "name": "Chat",
+      "webhookId": "13f4945f-0116-4d12-aa17-59c5b9e47ebe"
     }
   ],
   "pinData": {},
@@ -293,7 +403,7 @@
       "main": [
         [
           {
-            "node": "If",
+            "node": "AI Agent",
             "type": "main",
             "index": 0
           }
@@ -405,6 +515,57 @@
           }
         ]
       ]
+    },
+    "DeepSeek Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Chat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
@@ -412,8 +573,9 @@
     "executionOrder": "v1",
     "binaryMode": "separate"
   },
-  "versionId": "0181f3e6-b2a7-45cd-8bef-1e47d6377e70",
+  "versionId": "54ff1ffe-1708-460f-8900-19cd9339fce2",
   "meta": {
+    "templateCredsSetupCompleted": true,
     "instanceId": "6289c9e6cfb23ff1678c472b9a934510b74199abd98f74bb9badcadfd563b672"
   },
   "nodeGroups": [],
