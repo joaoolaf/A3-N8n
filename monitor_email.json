@@ -1,5 +1,5 @@
 {
-  "name": "Monitor Telegram",
+  "name": "Monitor Gmail",
   "nodes": [
     {
       "parameters": {
@@ -25,12 +25,12 @@
         },
         "options": {}
       },
-      "id": "6969ee16-b32d-440f-9db5-58319123cd74",
+      "id": "8a643139-ae78-48cb-9152-ebc741ffb5db",
       "name": "É urgente?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        -448,
+        -912,
         112
       ]
     },
@@ -40,12 +40,12 @@
         "responseBody": "{ \"mensagem\": \"Registrado e enviado ao Telegram: urgente\" }",
         "options": {}
       },
-      "id": "5d9383d7-c019-4b8c-a601-14850c499f8a",
+      "id": "8f062a4b-518e-455d-b536-d2ba5a1c0ab3",
       "name": "Responde urgente",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
       "position": [
-        464,
+        0,
         0
       ]
     },
@@ -55,12 +55,12 @@
         "responseBody": "{ \"mensagem\": \"Registrado e enviado ao Telegram: normal\" }",
         "options": {}
       },
-      "id": "a33d7c56-9da6-477c-803f-48985d63a0b8",
+      "id": "131a9624-2bba-47f9-a0d9-29a162f40d20",
       "name": "Responde normal",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
       "position": [
-        480,
+        16,
         240
       ]
     },
@@ -75,15 +75,15 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        208,
+        -256,
         32
       ],
-      "id": "f0778a88-95c4-4411-b253-41aa3c90f3cb",
+      "id": "103a743b-ffd7-48b9-a587-04ead57f0b0c",
       "name": "Send a message",
       "webhookId": "a5f8cfdb-a60e-476b-b6aa-023cdff4efff",
       "credentials": {
         "gmailOAuth2": {
-          "id": "MDYJvdnMotXm7Ane",
+          "id": "6lIoNMBiJR3gKHdi",
           "name": "Gmail account"
         }
       }
@@ -99,15 +99,15 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        192,
+        -272,
         208
       ],
-      "id": "da019377-871f-44fb-987c-ccd4f27b7b2f",
+      "id": "98c39a60-a734-4bb7-ae4b-3574ca1f8f2a",
       "name": "Send a message1",
       "webhookId": "2cdf12a1-4ec2-4330-9d3c-232b9b482d81",
       "credentials": {
         "gmailOAuth2": {
-          "id": "MDYJvdnMotXm7Ane",
+          "id": "6lIoNMBiJR3gKHdi",
           "name": "Gmail account"
         }
       }
@@ -119,10 +119,10 @@
       "type": "@n8n/n8n-nodes-langchain.chatTrigger",
       "typeVersion": 1.4,
       "position": [
-        -736,
+        -1200,
         112
       ],
-      "id": "c108933b-bb8a-45b2-b030-2bcd539b4aa6",
+      "id": "122bcaf6-825f-481c-864f-e2dd1411e406",
       "name": "When chat message received",
       "webhookId": "097ad886-a64d-4c7b-abca-a6306f4d91e5"
     }
@@ -181,17 +181,16 @@
       ]
     }
   },
-  "active": false,
+  "active": true,
   "settings": {
     "executionOrder": "v1",
     "binaryMode": "separate"
   },
-  "versionId": "58256855-45b7-4e24-94a6-b5e5ee62d77d",
+  "versionId": "c835db79-e471-4cb6-b6c9-fa0075b936b5",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "6289c9e6cfb23ff1678c472b9a934510b74199abd98f74bb9badcadfd563b672"
+    "instanceId": "75c2e7e46fe228b02b4e95b76f5694bd5920046ee8eacea4b7d2991600159ebb"
   },
-  "nodeGroups": [],
-  "id": "5g5iURSYkv60AZRM",
+  "id": "F23BAeBVeqwoXICM",
   "tags": []
 }
