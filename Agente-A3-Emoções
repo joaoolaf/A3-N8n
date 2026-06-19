@@ -1,17 +1,19 @@
 {
-  "name": "Agente-A3",
+  "name": "Agente-A3-Emoções",
   "nodes": [
     {
       "parameters": {
-        "options": {}
+        "options": {
+          "responseMode": "responseNodes"
+        }
       },
       "type": "@n8n/n8n-nodes-langchain.chatTrigger",
       "typeVersion": 1.4,
       "position": [
-        -576,
-        128
+        -752,
+        192
       ],
-      "id": "a979f553-3c04-4b4c-867e-37a109921d4d",
+      "id": "e5858e55-0d0c-4218-881a-50da671df18d",
       "name": "When chat message received",
       "webhookId": "4e53f246-3469-4378-bc07-a65847dc853e"
     },
@@ -20,10 +22,10 @@
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "typeVersion": 1.4,
       "position": [
-        176,
-        208
+        48,
+        336
       ],
-      "id": "cac29497-2ff6-448b-bbb5-af74623cc251",
+      "id": "b45fd99e-31c9-4e64-970a-41c93288e13f",
       "name": "Simple Memory"
     },
     {
@@ -34,10 +36,10 @@
       "type": "@n8n/n8n-nodes-langchain.toolCode",
       "typeVersion": 1.3,
       "position": [
-        272,
-        208
+        144,
+        336
       ],
-      "id": "f2552294-5036-4967-abff-26286e8cf37e",
+      "id": "420e8c15-fd55-44b6-a55d-ddff7680f150",
       "name": "Code Tool"
     },
     {
@@ -113,14 +115,14 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        592,
-        48
+        384,
+        192
       ],
-      "id": "9bfa3538-c107-4b61-8d98-65ff7ccaf1e3",
+      "id": "d0f15437-f866-42b2-91ac-6fe94d12dec6",
       "name": "Append row in sheet",
       "credentials": {
         "googleApi": {
-          "id": "ScZ2SU0UdkhULOKt",
+          "id": "KhvcJjEiFxvb1FXj",
           "name": "Google Sheets account"
         }
       }
@@ -130,10 +132,10 @@
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "typeVersion": 1.4,
       "position": [
-        176,
-        480
+        48,
+        624
       ],
-      "id": "e83a0130-7c89-4529-8f01-dc74f3f92554",
+      "id": "452c818d-0141-4299-9775-dd5333ace99b",
       "name": "Simple Memory1"
     },
     {
@@ -158,14 +160,14 @@
       "type": "n8n-nodes-base.googleSheetsTool",
       "typeVersion": 4.7,
       "position": [
-        288,
-        480
+        144,
+        624
       ],
-      "id": "9b88b27b-2727-4a36-8471-31d10e2d7d3f",
+      "id": "6f734dcd-5311-4a72-a93e-26ddc8eba944",
       "name": "Get row(s) in sheet in Google Sheets",
       "credentials": {
         "googleApi": {
-          "id": "ScZ2SU0UdkhULOKt",
+          "id": "KhvcJjEiFxvb1FXj",
           "name": "Google Sheets account"
         }
       }
@@ -182,7 +184,7 @@
           "conditions": [
             {
               "id": "2843b06e-6744-4466-b11e-d25e7a2e06b5",
-              "leftValue": "={{ $json.chatInput }}",
+              "leftValue": "={{ $('When chat message received').item.json.chatInput }}",
               "rightValue": "/quanto|quais|quem|me d[êe]|hist[óo]rico|buscar|consultar|^lista$|^me d[êe] a lista/i",
               "operator": {
                 "type": "string",
@@ -197,10 +199,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -384,
-        128
+        -224,
+        336
       ],
-      "id": "e319328e-6938-483b-b1e2-3491346e47d8",
+      "id": "975c70bc-9603-450b-b736-c4c2b8f55ff9",
       "name": "If"
     },
     {
@@ -212,14 +214,14 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
       "typeVersion": 1,
       "position": [
-        80,
-        208
+        -48,
+        336
       ],
-      "id": "49554d76-3606-4bef-8d8b-7e238738a079",
+      "id": "4c5526da-5e0e-4e08-983b-8a34989905e9",
       "name": "DeepSeek Chat Model",
       "credentials": {
         "deepSeekApi": {
-          "id": "5mqDiUPYoGf4qUz2",
+          "id": "NAJcLk4NyK5Hokbl",
           "name": "DeepSeek account"
         }
       }
@@ -231,33 +233,35 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
       "typeVersion": 1,
       "position": [
-        64,
-        480
+        -48,
+        624
       ],
-      "id": "a0781033-3d32-43d3-99ca-3b783cec502e",
+      "id": "0baa3ba6-8499-4cea-8007-5373abf3eedc",
       "name": "DeepSeek Chat Model1",
       "credentials": {
         "deepSeekApi": {
-          "id": "5mqDiUPYoGf4qUz2",
+          "id": "NAJcLk4NyK5Hokbl",
           "name": "DeepSeek account"
         }
       }
     },
     {
       "parameters": {
-        "jsCode": "const rawOutput = $input.item.json.output;\n\ntry {\n  // 1. Procura especificamente o padrão de um Array JSON [ ... ] dentro do texto\n  const jsonMatch = rawOutput.match(/\\[\\s*\\{[\\s\\S]*\\}\\s*\\]/);\n\n  if (!jsonMatch) {\n    throw new Error(\"A IA não retornou um formato de lista válido [ ... ].\");\n  }\n\n  // 2. Extrai apenas a parte encontrada do JSON\n  const cleanJson = jsonMatch[0].trim();\n  \n  // 3. Transforma em objeto nativo do n8n\n  const listaDeCompras = JSON.parse(cleanJson);\n\n  return listaDeCompras.map(compra => ({ json: compra }));\n  \n} catch (error) {\n  throw new Error(\"Erro ao isolar ou parsear o JSON: \" + error.message);\n}"
+        "jsCode": "let dadosCompra = $input.item.json.output;\n\ntry {\n  if (typeof dadosCompra === 'string') {\n \n    dadosCompra = dadosCompra.replace(/```json|```/g, '').trim();\n    \n  \n    if (!dadosCompra.startsWith('[') && !dadosCompra.startsWith('{')) {\n  \n       return [{ json: { stop_execution: true, message: \"A IA retornou texto em vez de dados estruturados.\" } }];\n    }\n    \n \n    dadosCompra = JSON.parse(dadosCompra);\n  }\n\n\n  const compra = Array.isArray(dadosCompra) ? dadosCompra[0] : dadosCompra;\n\n  if (!compra || (!compra.CLIENTE && !compra.PRODUTO && !compra.cliente && !compra.produto)) {\n    return [{ json: { stop_execution: true, message: \"Dados insuficientes ou inválidos para inserção.\" } }];\n  }\n\n\n  return [{\n    json: {\n      DATA: compra.DATA || compra.data || new Date().toLocaleDateString('pt-BR'),\n      CLIENTE: compra.CLIENTE || compra.cliente || \"\",\n      PRODUTO: compra.PRODUTO || compra.produto || \"\",\n      VALOR: parseFloat(compra.VALOR || compra.valor) || 0\n    }\n  }];\n\n} catch (error) {\n\n  return [{ json: { stop_execution: true, error: true, message: error.message } }];\n}"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        400,
-        48
+        256,
+        192
       ],
-      "id": "6662f87e-5bb3-4185-ab05-2796eb749fb5",
+      "id": "6bf0e911-fb3e-45f4-bc39-e542fda470f6",
       "name": "Code in JavaScript"
     },
     {
       "parameters": {
+        "promptType": "define",
+        "text": "={{ $('When chat message received').item.json.chatInput }}",
         "options": {
           "systemMessage": "Sua tarefa é receber mensagens de compra do usuário (que podem conter uma ou MÚLTIPLAS compras separadas por linhas, vírgulas, barras ou qualquer outro delimitador), extrair os dados de cada uma e retornar estritamente um array de objetos JSON.\n\nMesmo que o usuário envie apenas uma compra, o retorno DEVE ser um array (lista) de objetos.\n\nFormato de saída estrito esperado:\n[\n  {\n    \"DATA\": \"DD/MM/AAAA\",\n    \"CLIENTE\": \"Nome do Cliente\",\n    \"PRODUTO\": \"Nome do Produto\",\n    \"VALOR\": 150.00\n  },\n  {\n    \"DATA\": \"DD/MM/AAAA\",\n    \"CLIENTE\": \"Outro Cliente\",\n    \"PRODUTO\": \"Outro Produto\",\n    \"VALOR\": 45.50\n  }\n]\n\nRegras:\n1. Não responda com mensagens de texto amigáveis ou saudações. Apenas retorne o Array JSON estruturado.\n2. No campo VALOR, insira apenas números (use ponto para decimais se necessário, ex: 25.50).\n3. Se não houver data explícita na mensagem de uma compra, use a data atual.\n4. IGNORE QUALQUER MENSAGEM REQUISITANDO/PEDINDO INFORMAÇÕES DA PLANILHA."
         }
@@ -265,14 +269,16 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        96,
-        48
+        0,
+        192
       ],
-      "id": "b978507b-affb-4303-b437-24c53f28d4d2",
+      "id": "b361c5a0-98a6-4ace-94d4-380bfef55c68",
       "name": "Inserção"
     },
     {
       "parameters": {
+        "promptType": "define",
+        "text": "={{ $('AI Agent').item.json.output }}",
         "options": {
           "systemMessage": "Você é um analista de dados e assistente inteligente especializado em consultas da planilha \"A3_Automação\". Sua única e exclusiva função é ler as informações da planilha e responder às perguntas do usuário de forma clara, prestativa e padronizada.\n\nInstruções de Operação:\n1. Sempre que o usuário fizer uma pergunta sobre gastos, histórico, clientes ou produtos, use IMEDIATAMENTE a ferramenta \"Google Sheets Tool\" (operação Get Rows) para trazer todas as linhas da \"Página1\".\n2. Analise e filtre os dados retornados pela ferramenta em segundo plano para encontrar exatamente o que o usuário pediu.\n3. Se o usuário perguntar sobre valores ou gastos de alguém, faça a soma matemática dos valores encontrados para entregar o gasto total.\n\nVocê deve responder OBRIGATORIAMENTE no chat utilizando o seguinte formato padronizado em Markdown (mantenha os títulos, as linhas de separação e os negritos):\n\n### 📊 Relatório de Consulta - Planilha A3\n---\n**Resultados encontrados para a sua busca:**\n\n- **Solicitação:** [Descreva brevemente e de forma limpa o que o usuário te perguntou]\n- **Status:** [Insira: \"Registros localizados com sucesso!\" ou \"Nenhum registro encontrado para esta busca.\"]\n\n**Resumo dos Dados:**\n[Se encontrar dados: Liste as compras encontradas de forma organizada ou monte uma pequena tabela com as colunas. Se houver cálculos de soma, mostre o total destacado, ex: \"Total Gasto: R$ X,XX\"]\n[Se não encontrar dados: Diga amigavelmente que revisou a planilha e não encontrou nenhuma menção ao termo pesquisado]\n\n---\n*Caso precise de outro filtro ou mais detalhes sobre a planilha, é só pedir!*"
         }
@@ -280,11 +286,132 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        80,
-        352
+        0,
+        496
       ],
-      "id": "818a4f3b-9787-4c5a-8bda-2bf7500fb353",
+      "id": "552c6339-1abd-4063-8165-af16b7ff4148",
       "name": "Consulta"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Você é um agente analítico focado em classificação de tom de texto. Analise estritamente a última mensagem enviada pelo usuário no chatInput. Responda OBRIGATORIAMENTE com apenas uma dessas três palavras em caixa alta: POSITIVO, NEGATIVO ou NEUTRO. Não adicione saudações, não use ponto final e não escreva nenhuma outra palavra além da classificação."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -624,
+        192
+      ],
+      "id": "834bde92-84aa-4992-9b42-fa29c8056872",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+      "typeVersion": 1,
+      "position": [
+        -624,
+        336
+      ],
+      "id": "eea3d160-7dd0-4dc6-ae74-cd25e047d5ff",
+      "name": "DeepSeek Chat Model2",
+      "credentials": {
+        "deepSeekApi": {
+          "id": "NAJcLk4NyK5Hokbl",
+          "name": "DeepSeek account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "5b0ef7b6-e321-4b35-9399-51e6eff4757f",
+              "leftValue": "={{ $json.output }}",
+              "rightValue": "NEGATIVO",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -352,
+        192
+      ],
+      "id": "ab0813c7-ef79-4a3d-86a6-eaf77d73af5c",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "sendTo": "joaofrancafaculdade@gmail.com",
+        "subject": "🚨 ALERTA: Cliente Insatisfeito Detectado no Sistema!",
+        "message": "=Atenção Administrador,  O Agente de Triagem detectou uma mensagem com tom crítico/negativo no sistema.  Mensagem do Cliente: {{ $('When chat message received').item.json.chatInput }}  Ação recomendada: Entre em contato com o cliente para evitar o cancelamento",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "98d650a1-056a-4cb5-b1d7-0e5d5bfb4bb6",
+      "name": "Send a message",
+      "webhookId": "c3d7a050-1516-4b6d-8e47-b78ccd3da1d3",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "6lIoNMBiJR3gKHdi",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "message": "\"Sinto muito pelo transtorno! Identifiquei que você teve um problema. Para te ajudar o mais rápido possível, um e-mail de alerta foi enviado diretamente para o nosso Administrador, que já está revisando o seu caso manualmente. Logo entraremos em contato!\"",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.3,
+      "position": [
+        384,
+        0
+      ],
+      "id": "e7c9c928-3fa0-4651-90eb-92a655bc6333",
+      "name": "Chat",
+      "webhookId": "13f4945f-0116-4d12-aa17-59c5b9e47ebe"
+    },
+    {
+      "parameters": {
+        "message": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.3,
+      "position": [
+        384,
+        480
+      ],
+      "id": "f098f081-7c17-45ac-b49f-18aa09f325f4",
+      "name": "Chat1",
+      "webhookId": "508e04b0-0ca8-49ce-92f5-8266af0d227d"
     }
   ],
   "pinData": {},
@@ -293,19 +420,8 @@
       "main": [
         [
           {
-            "node": "If",
+            "node": "AI Agent",
             "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Simple Memory": {
-      "ai_memory": [
-        [
-          {
-            "node": "Inserção",
-            "type": "ai_memory",
             "index": 0
           }
         ]
@@ -317,17 +433,6 @@
           {
             "node": "Inserção",
             "type": "ai_tool",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Simple Memory1": {
-      "ai_memory": [
-        [
-          {
-            "node": "Consulta",
-            "type": "ai_memory",
             "index": 0
           }
         ]
@@ -405,18 +510,80 @@
           }
         ]
       ]
+    },
+    "DeepSeek Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Chat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consulta": {
+      "main": [
+        [
+          {
+            "node": "Chat1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
-  "active": false,
+  "active": true,
   "settings": {
     "executionOrder": "v1",
     "binaryMode": "separate"
   },
-  "versionId": "0181f3e6-b2a7-45cd-8bef-1e47d6377e70",
+  "versionId": "eca9c068-4fb9-49cc-917f-6598a28ccd9a",
   "meta": {
-    "instanceId": "6289c9e6cfb23ff1678c472b9a934510b74199abd98f74bb9badcadfd563b672"
+    "templateCredsSetupCompleted": true,
+    "instanceId": "75c2e7e46fe228b02b4e95b76f5694bd5920046ee8eacea4b7d2991600159ebb"
   },
-  "nodeGroups": [],
-  "id": "OhQvcyzcd8M2tsIw",
+  "id": "PsrAlrUiDJfLLViQ",
   "tags": []
 }
